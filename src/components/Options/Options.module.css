@@ -1,0 +1,58 @@
+.wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    position: absolute;
+    width: 240px;
+    height: 56px;
+    left: 76px;
+    top: 178px;
+
+    background: #FFFFFF;
+
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.06), 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.btn {
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: 10px;
+
+    width: 52px;
+    height: 48px;
+
+    background: #FFFFFF;
+    border: 1px solid #E2E3E5;
+    border-radius: 6px;
+    transition: 0.05s all linear;
+}
+
+.btn:active {
+    background: #5D5FEF;
+}
+
+.btn:active>.action {
+    color: #FFFFFF;
+}
+
+.action {
+    width: 6px;
+    height: 15px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 15px;
+
+    text-align: center;
+
+    color: #000000;
+}
