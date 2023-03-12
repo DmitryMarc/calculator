@@ -5,6 +5,7 @@ import styles from './Constructor.module.css';
 
 import adding from '../../assets/icons/adding.svg';
 import underline from '../../assets/icons/underline.svg';
+import pointer from '../../assets/icons/cursor-pointer.svg';
 
 const getListStyle = (isDraggingOver: boolean, list: ListItem[]) => ({
     background: isDraggingOver && !list.length ? '#F0F9FF' : 'white',
@@ -12,28 +13,29 @@ const getListStyle = (isDraggingOver: boolean, list: ListItem[]) => ({
     borderTop: list.length ? 'none' : '2px dashed #C4C4C4',
 });
 
+const getItemStyle = (isRuntime:boolean, id: string) => ({
+    cursor: isRuntime ? `url(${pointer}) 10 10, auto` : 'drag'
+})
+
 const getPlaceholderStyle = (list: ListItem[]) => ({
     display: list.length ? 'none' : 'block'
 });
 
-const getDividerStyle = (transform: string | undefined, index: number, isDragging: boolean) => {
-    console.log(isDragging)
-    return {
-        display: !isDragging || (isDragging && (transform || index === 3)) ? 'none' : 'block'
-    }
-};
+const getDividerStyle = (transform: string | undefined, isDragging: boolean) => ({
+    display: !isDragging || (isDragging && (transform)) ? 'none' : 'block'
+});
 
-const Constructor: FC<BoardProps & { isDragging: boolean }> = ({ col: { list, id }, isDragging }) => {
+const Constructor: FC<BoardProps & { isDragging: boolean, isRuntime:boolean }> = ({ col: { list, id }, isDragging, isRuntime }) => {
     return (
         <Droppable droppableId={id} key={id}>
             {(provided, snapshot) => (
                 <div ref={provided.innerRef} {...provided.droppableProps} className={styles.construction}
                     style={getListStyle(snapshot.isDraggingOver, list)}>
                     {list.map((item, index) => (
-                        <Draggable draggableId={item.id} index={index} key={item.id} >
+                        <Draggable draggableId={item.id} index={index} key={item.id} isDragDisabled={isRuntime || item.id === 'Display'} >
                             {(provided) => {
                                 return (
-                                    <>
+                                    <div style={getItemStyle(isRuntime, item.id)}>
                                         <div className={styles.item}
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
@@ -41,10 +43,10 @@ const Constructor: FC<BoardProps & { isDragging: boolean }> = ({ col: { list, id
                                         >
                                             {item.component}
                                             <img className={styles.divider}
-                                                style={getDividerStyle(provided.draggableProps.style?.transform, index, isDragging)}
+                                                style={getDividerStyle(provided.draggableProps.style?.transform, isDragging)}
                                                 src={underline} alt="underline" />
                                         </div>
-                                    </>
+                                        </div>
                                 )
                             }}
                         </Draggable>

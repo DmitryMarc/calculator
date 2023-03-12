@@ -28,6 +28,10 @@
     transition: 0.05s all linear;
 }
 
+.btn:hover{
+    cursor: url('../../assets/icons/cursor-pointer.svg') 10 10, auto;
+}
+
 .btn:first-child {
     width: 108px;
     height: 36px;

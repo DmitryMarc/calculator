@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { ListItem } from "../../@types/common";
 import Constructor from "../Constructor/Constructor";
@@ -9,33 +9,41 @@ import Modes from "../Modes/Modes";
 import Numbers from "../Numbers/Numbers";
 import Options from "../Options/Options";
 
-import cursor from '../../assets/icons/cursor.svg';
+import move from '../../assets/icons/cursor-move.svg';
 
 import styles from "./Calculator.module.css";
 
 const getCalcStyle = (isDragging: boolean) => ({
-    cursor: isDragging ? `url(${cursor}) 10 10, auto` : 'default'
+    cursor: isDragging ? `url(${move}) 10 10, auto` : 'default'
 })
 
 const Calculator: FC = () => {
-    const initialColumns = {
-        'list-1': {
-            id: 'list-1',
-            list: [
-                { id: 'Display', component: <Display /> },
-                { id: 'Options', component: <Options /> },
-                { id: 'Numbers', component: <Numbers /> },
-                { id: 'EqualSign', component: <EqualSign /> }
-            ]
-        },
-        'list-2': {
-            id: 'list-2',
-            list: []
-        }
-    }
 
+const initialColumns = {
+    'list-1': {
+        id: 'list-1',
+        list: [
+            { id: 'Display', component: <Display /> },
+            { id: 'Options', component: <Options /> },
+            { id: 'Numbers', component: <Numbers /> },
+            { id: 'EqualSign', component: <EqualSign /> }
+        ]
+    },
+    'list-2': {
+        id: 'list-2',
+        list: []
+    }
+}
+    
+    const [isRuntime, setIsRuntime] = useState(false);
     const [columns, setColumns] = useState(initialColumns);
     const [isDragging, setIsDragging] = useState(false);
+
+    useEffect(() => {
+        if (!isRuntime){
+            setColumns(initialColumns);
+        }
+    }, [isRuntime])
 
     const onDragStart = () => {
         setIsDragging(true);
@@ -69,10 +77,17 @@ const Calculator: FC = () => {
             // Then insert the item at the right location
             newList.splice(destination.index, 0, start.list[source.index])
 
+            const compare = (a: any, b: any) => {
+                let flag = 0
+                if (a.id === 'Display') flag = -1
+                if (b.id === 'Display') flag = 1
+                return flag;
+            }
+
             // Then create a new copy of the column object
             const newCol = {
                 id: start.id,
-                list: newList
+                list: newList.sort(compare)
             }
 
             // Update the state
@@ -106,12 +121,19 @@ const Calculator: FC = () => {
             }
 
             // Insert the item into the end list
+
             newEndList.splice(destination.index, 0, newPastedElement)
 
-            // Create a new end column
+            const compare = (a: any, b: any) => {
+                let flag = 0
+                if (a.id === 'Display') flag = -1
+                if (b.id === 'Display') flag = 1
+                return flag;
+            }
+
             const newEndCol = {
                 id: end.id,
-                list: newEndList
+                list: newEndList.sort(compare)
             }
 
             // Update the state
@@ -128,11 +150,11 @@ const Calculator: FC = () => {
         <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
             <div className={styles.wrapper} style={getCalcStyle(isDragging)}>
                 <div className={styles.calculator}>
-                    <Modes />
+                    <Modes isRuntime={isRuntime} setIsRuntime={setIsRuntime} columns={columns} />
                     {Object.values(columns).map(col => (
-                        col.id === "list-1"
+                        col.id === "list-1" && !isRuntime
                             ? <Dashboard col={col} key={col.id} />
-                            : <Constructor isDragging={isDragging} col={col} key={col.id} />
+                            : <Constructor isDragging={isDragging} isRuntime={isRuntime} col={col} key={col.id} />
                     ))}
                 </div>
             </div>

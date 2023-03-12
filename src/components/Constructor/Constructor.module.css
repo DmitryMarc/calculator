@@ -33,6 +33,15 @@
     border-radius: 4px;
 }
 
+[data-rbd-draggable-id="Display"].item {
+    cursor: url('../../assets/icons/cursor-no-drop.svg') 10 10, auto;
+    transform: none !important;
+}
+
+/* .item:not([data-rbd-draggable-id="Display"]){
+    cursor: url('../../assets/icons/cursor-pointer.svg') 10 10, auto;
+} */
+
 .content {
     position: absolute;
     width: 127px;
