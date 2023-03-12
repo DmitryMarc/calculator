@@ -11,9 +11,9 @@ const Numbers: FC = () => {
         )
     })
     return (
-        <div className={styles.wrapper}>
+        <>
             {numbersList}
-        </div>
+        </>
     )
 }
 

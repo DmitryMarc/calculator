@@ -8,9 +8,9 @@ const Options: FC = () => {
         </div>
     ))
     return (
-        <div className={styles.wrapper}>
+        <>
             {optionsList}
-        </div>
+        </>
     )
 }
 
