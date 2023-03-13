@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { ListItem } from "../../@types/common";
 import Constructor from "../Constructor/Constructor";
@@ -11,6 +11,8 @@ import Options from "../Options/Options";
 
 import move from '../../assets/icons/cursor-move.svg';
 
+import { useSelector } from "react-redux";
+import { selectIsRuntime } from "../../redux/features/mode/modeSlice";
 import styles from "./Calculator.module.css";
 
 const getCalcStyle = (isDragging: boolean) => ({
@@ -18,29 +20,28 @@ const getCalcStyle = (isDragging: boolean) => ({
 })
 
 const Calculator: FC = () => {
+    const isRuntime = useSelector(selectIsRuntime);
 
-const initialColumns = {
-    'list-1': {
-        id: 'list-1',
-        list: [
-            { id: 'Display', component: <Display /> },
-            { id: 'Options', component: <Options /> },
-            { id: 'Numbers', component: <Numbers /> },
-            { id: 'EqualSign', component: <EqualSign /> }
-        ]
-    },
-    'list-2': {
-        id: 'list-2',
-        list: []
+    const initialColumns = {
+        'list-1': {
+            id: 'list-1',
+            list: [
+                { id: 'Display', component: <Display /> },
+                { id: 'Options', component: <Options /> },
+                { id: 'Numbers', component: <Numbers /> },
+                { id: 'EqualSign', component: <EqualSign /> }
+            ]
+        },
+        'list-2': {
+            id: 'list-2',
+            list: []
+        }
     }
-}
-    
-    const [isRuntime, setIsRuntime] = useState(false);
     const [columns, setColumns] = useState(initialColumns);
     const [isDragging, setIsDragging] = useState(false);
 
     useEffect(() => {
-        if (!isRuntime){
+        if (!isRuntime) {
             setColumns(initialColumns);
         }
     }, [isRuntime])
@@ -150,11 +151,11 @@ const initialColumns = {
         <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
             <div className={styles.wrapper} style={getCalcStyle(isDragging)}>
                 <div className={styles.calculator}>
-                    <Modes isRuntime={isRuntime} setIsRuntime={setIsRuntime} columns={columns} />
+                    <Modes columns={columns} />
                     {Object.values(columns).map(col => (
                         col.id === "list-1" && !isRuntime
                             ? <Dashboard col={col} key={col.id} />
-                            : <Constructor isDragging={isDragging} isRuntime={isRuntime} col={col} key={col.id} />
+                            : <Constructor isDragging={isDragging} col={col} key={col.id} />
                     ))}
                 </div>
             </div>

@@ -3,11 +3,12 @@ import styles from './Modes.module.css';
 
 import runtime from '../../assets/icons/runtime.svg';
 import constructor from '../../assets/icons/constructor.svg';
-// import { ColumnsType } from "../Calculator/Calculator";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { changeMode, selectIsRuntime } from "../../redux/features/mode/modeSlice";
+import { resetData } from "../../redux/features/calculator/calculatorSlice";
 
 type PropsType = {
-    isRuntime: boolean,
-    setIsRuntime: (isRuntime: boolean) => void,
     columns: {
         'list-1': {
             id: string;
@@ -23,13 +24,19 @@ type PropsType = {
     }
 }
 
-const Modes: FC<PropsType> = ({isRuntime, setIsRuntime, columns}) => {
+const Modes: FC<PropsType> = ({ columns }) => {
+    const isRuntime = useSelector(selectIsRuntime)
+    const dispatch = useDispatch()
     const onClickRuntime = () => {
-        if (columns["list-2"].list.length < 4){
+        if (columns["list-2"].list.length < 4) {
             alert('Калькулятор собран не полностью!')
         } else {
-            setIsRuntime(true)
+            dispatch(changeMode(true))
         }
+    }
+    const onClickConstructor = () => {
+        dispatch(resetData());
+        dispatch(changeMode(false));
     }
     return (
         <div className={styles.modes}>
@@ -39,7 +46,7 @@ const Modes: FC<PropsType> = ({isRuntime, setIsRuntime, columns}) => {
                     <span className={styles.title}>Runtime</span>
                 </span>
             </button>
-            <button className={`${styles.btn} ${!isRuntime && styles.active}`} onClick={() => setIsRuntime(false)}>
+            <button className={`${styles.btn} ${!isRuntime && styles.active}`} onClick={onClickConstructor}>
                 <span className={styles.content}>
                     <img src={constructor} alt="constructor" />
                     <span className={styles.title}>Constructor</span>

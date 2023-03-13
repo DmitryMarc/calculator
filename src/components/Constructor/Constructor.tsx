@@ -6,6 +6,8 @@ import styles from './Constructor.module.css';
 import adding from '../../assets/icons/adding.svg';
 import underline from '../../assets/icons/underline.svg';
 import pointer from '../../assets/icons/cursor-pointer.svg';
+import { useSelector } from "react-redux";
+import { selectIsRuntime } from "../../redux/features/mode/modeSlice";
 
 const getListStyle = (isDraggingOver: boolean, list: ListItem[]) => ({
     background: isDraggingOver && !list.length ? '#F0F9FF' : 'white',
@@ -13,7 +15,7 @@ const getListStyle = (isDraggingOver: boolean, list: ListItem[]) => ({
     borderTop: list.length ? 'none' : '2px dashed #C4C4C4',
 });
 
-const getItemStyle = (isRuntime:boolean, id: string) => ({
+const getItemStyle = (isRuntime: boolean, id: string) => ({
     cursor: isRuntime ? `url(${pointer}) 10 10, auto` : 'drag'
 })
 
@@ -25,7 +27,8 @@ const getDividerStyle = (transform: string | undefined, isDragging: boolean) => 
     display: !isDragging || (isDragging && (transform)) ? 'none' : 'block'
 });
 
-const Constructor: FC<BoardProps & { isDragging: boolean, isRuntime:boolean }> = ({ col: { list, id }, isDragging, isRuntime }) => {
+const Constructor: FC<BoardProps & { isDragging: boolean }> = ({ col: { list, id }, isDragging }) => {
+    const isRuntime = useSelector(selectIsRuntime);
     return (
         <Droppable droppableId={id} key={id}>
             {(provided, snapshot) => (
@@ -46,7 +49,7 @@ const Constructor: FC<BoardProps & { isDragging: boolean, isRuntime:boolean }> =
                                                 style={getDividerStyle(provided.draggableProps.style?.transform, isDragging)}
                                                 src={underline} alt="underline" />
                                         </div>
-                                        </div>
+                                    </div>
                                 )
                             }}
                         </Draggable>

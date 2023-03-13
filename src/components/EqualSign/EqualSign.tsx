@@ -1,9 +1,20 @@
 import { FC } from "react"
+import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import { totalCount } from "../../redux/features/calculator/calculatorSlice"
+import { selectIsRuntime } from "../../redux/features/mode/modeSlice"
 import styles from './EqualSign.module.css'
 
 const EqualSign: FC = () => {
+    const isRuntime = useSelector(selectIsRuntime)
+    const dispatch = useDispatch();
+    const onClickHandler = () => {
+        if (isRuntime){
+            dispatch(totalCount());
+        }
+    }
     return (
-        <div className={styles.equal}>
+        <div className={styles.equal} onClick={onClickHandler}>
             <span className={styles.sumbol}>=</span>
         </div>
     )
