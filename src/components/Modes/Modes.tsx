@@ -6,21 +6,10 @@ import constructor from '../../assets/icons/constructor.svg';
 import runtime from '../../assets/icons/runtime.svg';
 import { resetData } from "../../redux/features/calculator/calculatorSlice";
 import { changeMode, selectIsRuntime } from "../../redux/features/mode/modeSlice";
+import { InitialState } from "../Calculator/Calculator";
 
 type PropsType = {
-    columns: {
-        'list-1': {
-            id: string;
-            list: {
-                id: string;
-                component: JSX.Element;
-            }[];
-        };
-        'list-2': {
-            id: string;
-            list: never[];
-        };
-    }
+    columns: InitialState
 }
 
 const Modes: FC<PropsType> = ({ columns }) => {

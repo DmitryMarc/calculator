@@ -8,6 +8,13 @@ import adding from '../../assets/icons/adding.svg';
 import pointer from '../../assets/icons/cursor-pointer.svg';
 import underline from '../../assets/icons/underline.svg';
 import { selectIsRuntime } from "../../redux/features/mode/modeSlice";
+import { InitialState } from "../Calculator/Calculator";
+
+type ExtraProps = {
+    isDragging: boolean,
+    setColumns: (columns: InitialState) => void,
+    columns: InitialState
+}
 
 const getListStyle = (isDraggingOver: boolean, list: ListItem[]) => ({
     background: isDraggingOver && !list.length ? '#F0F9FF' : 'white',
@@ -27,8 +34,25 @@ const getDividerStyle = (transform: string | undefined, isDragging: boolean) => 
     display: !isDragging || (isDragging && (transform)) ? 'none' : 'block'
 });
 
-const Constructor: FC<BoardProps & { isDragging: boolean }> = ({ col: { list, id }, isDragging }) => {
+const Constructor: FC<BoardProps & ExtraProps> = ({ col: { list, id }, isDragging, setColumns, columns }) => {
     const isRuntime = useSelector(selectIsRuntime);
+    const onDoubleClick = (id: string) => {
+        if (!isRuntime) {
+            const col = { ...columns };
+            col["list-1"].list.forEach(item => {
+                if (item.id.includes(id)) {
+                    item.id = id;
+                }
+            });
+            col["list-2"].list.forEach((item, index) => {
+                if (item.id === id) {
+                    item.id = id;
+                    col["list-2"].list.splice(index, 1);
+                }
+            });
+            setColumns(col);
+        }
+    }
     return (
         <Droppable droppableId={id} key={id}>
             {(provided, snapshot) => (
@@ -40,6 +64,7 @@ const Constructor: FC<BoardProps & { isDragging: boolean }> = ({ col: { list, id
                                 return (
                                     <div style={getItemStyle(isRuntime)}>
                                         <div className={styles.item}
+                                            onDoubleClick={() => onDoubleClick(item.id)}
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}

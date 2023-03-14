@@ -10,16 +10,26 @@ import Numbers from "../Numbers/Numbers";
 import Options from "../Options/Options";
 
 import { useSelector } from "react-redux";
+import move from '../../assets/icons/cursor-move.svg';
 import { selectIsRuntime } from "../../redux/features/mode/modeSlice";
 import styles from "./Calculator.module.css";
-import move from '../../assets/icons/cursor-move.svg';
+
+type BoardType = {
+    id: string;
+    list: ListItem[];
+};
+
+export type InitialState = {
+    'list-1': BoardType,
+    'list-2': BoardType
+}
 
 const getCalcStyle = (isDragging: boolean) => ({
     cursor: isDragging ? `url(${move}) 10 10, auto` : 'default'
 })
 
 const Calculator: FC = () => {
-    const initialColumns = {
+    const initialColumns: InitialState = {
         'list-1': {
             id: 'list-1',
             list: [
@@ -145,14 +155,14 @@ const Calculator: FC = () => {
     }
 
     return (
-        <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+        <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart} >
             <div className={styles.wrapper} style={getCalcStyle(isDragging)}>
                 <div className={styles.calculator}>
                     <Modes columns={columns} />
                     {Object.values(columns).map(col => (
                         (col.id === "list-1" && !isRuntime)
                             ? <Dashboard col={col} key={col.id} />
-                            : <Constructor isDragging={isDragging} col={col} key={col.id} />
+                            : <Constructor isDragging={isDragging} columns={columns} setColumns={setColumns} col={col} key={col.id} />
                     ))}
                 </div>
             </div>
