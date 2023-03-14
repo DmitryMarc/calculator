@@ -1,6 +1,5 @@
 import { FC } from "react"
-import { useDispatch } from "react-redux"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { addSign, OperationType } from "../../redux/features/calculator/calculatorSlice"
 import { selectIsRuntime } from "../../redux/features/mode/modeSlice"
 import styles from './Options.module.css'

@@ -1,12 +1,11 @@
-import { FC, useState } from "react"
+import { FC } from "react";
 import styles from './Modes.module.css';
 
-import runtime from '../../assets/icons/runtime.svg';
+import { useDispatch, useSelector } from "react-redux";
 import constructor from '../../assets/icons/constructor.svg';
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { changeMode, selectIsRuntime } from "../../redux/features/mode/modeSlice";
+import runtime from '../../assets/icons/runtime.svg';
 import { resetData } from "../../redux/features/calculator/calculatorSlice";
+import { changeMode, selectIsRuntime } from "../../redux/features/mode/modeSlice";
 
 type PropsType = {
     columns: {
@@ -25,13 +24,13 @@ type PropsType = {
 }
 
 const Modes: FC<PropsType> = ({ columns }) => {
-    const isRuntime = useSelector(selectIsRuntime)
-    const dispatch = useDispatch()
+    const isRuntime = useSelector(selectIsRuntime);
+    const dispatch = useDispatch();
     const onClickRuntime = () => {
         if (columns["list-2"].list.length < 4) {
-            alert('Калькулятор собран не полностью!')
+            alert('Калькулятор собран не полностью!');
         } else {
-            dispatch(changeMode(true))
+            dispatch(changeMode(true));
         }
     }
     const onClickConstructor = () => {
@@ -56,4 +55,4 @@ const Modes: FC<PropsType> = ({ columns }) => {
     )
 }
 
-export default Modes
+export default Modes;

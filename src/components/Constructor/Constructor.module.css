@@ -29,7 +29,6 @@
     row-gap: 7px;
 
     background: #FFFFFF;
-
     border-radius: 4px;
 }
 
@@ -37,10 +36,6 @@
     cursor: url('../../assets/icons/cursor-no-drop.svg') 10 10, auto;
     transform: none !important;
 }
-
-/* .item:not([data-rbd-draggable-id="Display"]){
-    cursor: url('../../assets/icons/cursor-pointer.svg') 10 10, auto;
-} */
 
 .content {
     position: absolute;

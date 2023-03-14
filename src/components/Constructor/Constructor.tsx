@@ -3,10 +3,10 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import { BoardProps, ListItem } from "../../@types/common";
 import styles from './Constructor.module.css';
 
-import adding from '../../assets/icons/adding.svg';
-import underline from '../../assets/icons/underline.svg';
-import pointer from '../../assets/icons/cursor-pointer.svg';
 import { useSelector } from "react-redux";
+import adding from '../../assets/icons/adding.svg';
+import pointer from '../../assets/icons/cursor-pointer.svg';
+import underline from '../../assets/icons/underline.svg';
 import { selectIsRuntime } from "../../redux/features/mode/modeSlice";
 
 const getListStyle = (isDraggingOver: boolean, list: ListItem[]) => ({
@@ -15,7 +15,7 @@ const getListStyle = (isDraggingOver: boolean, list: ListItem[]) => ({
     borderTop: list.length ? 'none' : '2px dashed #C4C4C4',
 });
 
-const getItemStyle = (isRuntime: boolean, id: string) => ({
+const getItemStyle = (isRuntime: boolean) => ({
     cursor: isRuntime ? `url(${pointer}) 10 10, auto` : 'drag'
 })
 
@@ -38,7 +38,7 @@ const Constructor: FC<BoardProps & { isDragging: boolean }> = ({ col: { list, id
                         <Draggable draggableId={item.id} index={index} key={item.id} isDragDisabled={isRuntime || item.id === 'Display'} >
                             {(provided) => {
                                 return (
-                                    <div style={getItemStyle(isRuntime, item.id)}>
+                                    <div style={getItemStyle(isRuntime)}>
                                         <div className={styles.item}
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
@@ -67,4 +67,4 @@ const Constructor: FC<BoardProps & { isDragging: boolean }> = ({ col: { list, id
     )
 }
 
-export default Constructor
+export default Constructor;

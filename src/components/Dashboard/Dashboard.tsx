@@ -14,25 +14,24 @@ const Dashboard: FC<BoardProps> = ({ col: { list, id } }) => {
             const isDragDisabled = item.id.split('-').includes('copy');
             return (
               <Draggable draggableId={item.id} index={index} key={item.id} isDragDisabled={isDragDisabled}>
-                {(provided, snapshot) => {
-                  return (
-                    <>
-                      <div className={`${styles.item} ${snapshot.isDragging && styles.dragging} 
+                {(provided, snapshot) => (
+                  <>
+                    <div className={`${styles.item} ${snapshot.isDragging && styles.dragging} 
                       ${isDragDisabled && styles.disabled}`}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      {item.component}
+                    </div>
+                    {snapshot.isDragging &&
+                      <div className={styles.copy}>
                         {item.component}
                       </div>
-                      {snapshot.isDragging &&
-                        <div className={styles.copy}>
-                          {item.component}
-                        </div>
-                      }
-                    </>
-                  )
-                }}
+                    }
+                  </>
+                )
+                }
               </Draggable>
             )
           }
@@ -44,4 +43,4 @@ const Dashboard: FC<BoardProps> = ({ col: { list, id } }) => {
   )
 }
 
-export default Dashboard
+export default Dashboard;

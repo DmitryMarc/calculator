@@ -1,15 +1,14 @@
 import { FC } from "react"
-import { useSelector } from "react-redux"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { totalCount } from "../../redux/features/calculator/calculatorSlice"
 import { selectIsRuntime } from "../../redux/features/mode/modeSlice"
 import styles from './EqualSign.module.css'
 
 const EqualSign: FC = () => {
-    const isRuntime = useSelector(selectIsRuntime)
+    const isRuntime = useSelector(selectIsRuntime);
     const dispatch = useDispatch();
     const onClickHandler = () => {
-        if (isRuntime){
+        if (isRuntime) {
             dispatch(totalCount());
         }
     }
@@ -20,4 +19,4 @@ const EqualSign: FC = () => {
     )
 }
 
-export default EqualSign
+export default EqualSign;

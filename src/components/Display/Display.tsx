@@ -13,7 +13,7 @@ const Display: FC = () => {
     const enteredNumber = useSelector(selectEnteredNumber);
     const expression = useSelector(selectExpression);
     const error = useSelector(selectError);
-    let visibility = '0'
+    let visibility = '0';
     if (isRuntime && !error) {
         if (enteredNumber) {
             visibility = enteredNumber;
@@ -32,4 +32,4 @@ const Display: FC = () => {
     )
 }
 
-export default Display
+export default Display;

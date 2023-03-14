@@ -1,8 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
 
-export type OperationType = '+' | '-' | 'x' | '/'
+export type OperationType = '+' | '-' | 'x' | '/';
 
 type InitialState = {
     result: number,
@@ -57,15 +57,15 @@ export const calculatorSlice = createSlice({
                     if (index >= 1) {
                         switch (array[index - 1]) {
                             case '+': {
-                                sum += +item
+                                sum += +item;
                                 break;
                             }
                             case '-': {
-                                sum -= +item
+                                sum -= +item;
                                 break;
                             }
                             case 'x': {
-                                sum *= +item
+                                sum *= +item;
                                 break;
                             }
                             case '/': {
@@ -101,7 +101,6 @@ export const calculatorSlice = createSlice({
 
 export const selectResult = (state: RootState) => state.calculator.result;
 export const selectEnteredNumber = (state: RootState) => state.calculator.enteredNumber;
-export const selectCurrentOperation = (state: RootState) => state.calculator.сurrentOperation;
 export const selectExpression = (state: RootState) => state.calculator.expression;
 export const selectError = (state: RootState) => state.calculator.error;
 

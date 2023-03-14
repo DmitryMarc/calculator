@@ -28,7 +28,7 @@
     transition: 0.05s all linear;
 }
 
-.btn:hover{
+.btn:hover {
     cursor: url('../../assets/icons/cursor-pointer.svg') 10 10, auto;
 }
 
@@ -56,12 +56,12 @@
     gap: 8px;
 }
 
-.btn:first-child>.content {
+.btn:first-child > .content {
     width: 84px;
     height: 20px;
 }
 
-.btn:last-child>.content {
+.btn:last-child > .content {
     width: 109px;
     height: 20px;
 }

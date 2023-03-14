@@ -29,4 +29,4 @@ const Numbers: FC = () => {
     )
 }
 
-export default Numbers
+export default Numbers;

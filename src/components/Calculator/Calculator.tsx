@@ -9,19 +9,16 @@ import Modes from "../Modes/Modes";
 import Numbers from "../Numbers/Numbers";
 import Options from "../Options/Options";
 
-import move from '../../assets/icons/cursor-move.svg';
-
 import { useSelector } from "react-redux";
 import { selectIsRuntime } from "../../redux/features/mode/modeSlice";
 import styles from "./Calculator.module.css";
+import move from '../../assets/icons/cursor-move.svg';
 
 const getCalcStyle = (isDragging: boolean) => ({
     cursor: isDragging ? `url(${move}) 10 10, auto` : 'default'
 })
 
 const Calculator: FC = () => {
-    const isRuntime = useSelector(selectIsRuntime);
-
     const initialColumns = {
         'list-1': {
             id: 'list-1',
@@ -37,6 +34,8 @@ const Calculator: FC = () => {
             list: []
         }
     }
+
+    const isRuntime = useSelector(selectIsRuntime);
     const [columns, setColumns] = useState(initialColumns);
     const [isDragging, setIsDragging] = useState(false);
 
@@ -55,33 +54,31 @@ const Calculator: FC = () => {
         setIsDragging(false);
 
         // Make sure we have a valid destination
-        if (destination === undefined || destination === null) return null
+        if (destination === undefined || destination === null) return null;
 
         // Make sure we're actually moving the item
-        if (
-            source.droppableId === destination.droppableId &&
-            destination.index === source.index
-        ) return null
+        if (source.droppableId === destination.droppableId &&
+            destination.index === source.index) return null;
 
         // Set start and end variables
-        const start = columns[source.droppableId as keyof typeof initialColumns]
-        const end = columns[destination.droppableId as keyof typeof initialColumns]
+        const start = columns[source.droppableId as keyof typeof initialColumns];
+        const end = columns[destination.droppableId as keyof typeof initialColumns];
 
         // If start is the same as end, we're in the same column
         if (start === end) {
             // Move the item within the list
             // Start by making a new list without the dragged item
             const newList = start.list.filter(
-                (_: any, idx: number) => idx !== source.index
+                (_: ListItem, idx: number) => idx !== source.index
             )
 
             // Then insert the item at the right location
-            newList.splice(destination.index, 0, start.list[source.index])
+            newList.splice(destination.index, 0, start.list[source.index]);
 
-            const compare = (a: any, b: any) => {
-                let flag = 0
-                if (a.id === 'Display') flag = -1
-                if (b.id === 'Display') flag = 1
+            const compare = (a: ListItem, b: ListItem) => {
+                let flag = 0;
+                if (a.id === 'Display') flag = -1;
+                if (b.id === 'Display') flag = 1;
                 return flag;
             }
 
@@ -93,14 +90,14 @@ const Calculator: FC = () => {
 
             // Update the state
             setColumns(state => ({ ...state, [newCol.id]: newCol }))
-            return null
+            return null;
         } else {
             // If start is different from end, we need to update multiple columns
             // Filter the start list like before
             const newStartList = start.list.map(
                 (item: ListItem, idx: number) => {
                     if (idx === source.index) {
-                        item.id += '-copy'
+                        item.id += '-copy';
                     }
                     return item;
                 }
@@ -113,7 +110,7 @@ const Calculator: FC = () => {
             }
 
             // Make a new end list array
-            const newEndList = end.list
+            const newEndList = end.list;
 
             // Make a new pasted element into the end column
             let newPastedElement = {
@@ -122,16 +119,16 @@ const Calculator: FC = () => {
             }
 
             // Insert the item into the end list
+            newEndList.splice(destination.index, 0, newPastedElement);
 
-            newEndList.splice(destination.index, 0, newPastedElement)
-
-            const compare = (a: any, b: any) => {
-                let flag = 0
-                if (a.id === 'Display') flag = -1
-                if (b.id === 'Display') flag = 1
+            const compare = (a: ListItem, b: ListItem) => {
+                let flag = 0;
+                if (a.id === 'Display') flag = -1;
+                if (b.id === 'Display') flag = 1;
                 return flag;
             }
 
+            // Create a new end column
             const newEndCol = {
                 id: end.id,
                 list: newEndList.sort(compare)
@@ -143,7 +140,7 @@ const Calculator: FC = () => {
                 [newStartCol.id]: newStartCol,
                 [newEndCol.id]: newEndCol
             }))
-            return null
+            return null;
         }
     }
 
@@ -153,7 +150,7 @@ const Calculator: FC = () => {
                 <div className={styles.calculator}>
                     <Modes columns={columns} />
                     {Object.values(columns).map(col => (
-                        col.id === "list-1" && !isRuntime
+                        (col.id === "list-1" && !isRuntime)
                             ? <Dashboard col={col} key={col.id} />
                             : <Constructor isDragging={isDragging} col={col} key={col.id} />
                     ))}
