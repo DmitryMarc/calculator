@@ -11,7 +11,7 @@ const Dashboard: FC<BoardProps> = ({ col: { list, id } }) => {
       {(provided) => (
         <div ref={provided.innerRef} {...provided.droppableProps} className={styles.list}>
           {list.map((item, index) => {
-            const isDragDisabled = item.id.split('-').includes('copy');
+            const isDragDisabled = item.id.includes('copy');
             return (
               <Draggable draggableId={item.id} index={index} key={item.id} isDragDisabled={isDragDisabled}>
                 {(provided, snapshot) => (

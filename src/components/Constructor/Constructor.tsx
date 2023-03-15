@@ -13,7 +13,8 @@ import { InitialState } from "../Calculator/Calculator";
 type ExtraProps = {
     isDragging: boolean,
     setColumns: (columns: InitialState) => void,
-    columns: InitialState
+    columns: InitialState,
+    destinationItem: null | number
 }
 
 const getListStyle = (isDraggingOver: boolean, list: ListItem[]) => ({
@@ -30,12 +31,15 @@ const getPlaceholderStyle = (list: ListItem[]) => ({
     display: list.length ? 'none' : 'block'
 });
 
-const getDividerStyle = (transform: string | undefined, isDragging: boolean) => ({
-    display: !isDragging || (isDragging && (transform)) ? 'none' : 'block'
+const getDividerStyle = (itemIndex: number, destinationItem: null | number, isDragging: boolean) => ({
+    display: (!isDragging)
+        || (isDragging && destinationItem && itemIndex !== destinationItem - 1)
+        ? 'none' : 'block'
 });
 
-const Constructor: FC<BoardProps & ExtraProps> = ({ col: { list, id }, isDragging, setColumns, columns }) => {
+const Constructor: FC<BoardProps & ExtraProps> = ({ col: { list, id }, isDragging, setColumns, columns, destinationItem }) => {
     const isRuntime = useSelector(selectIsRuntime);
+
     const onDoubleClick = (id: string) => {
         if (!isRuntime) {
             const col = { ...columns };
@@ -60,8 +64,8 @@ const Constructor: FC<BoardProps & ExtraProps> = ({ col: { list, id }, isDraggin
                     style={getListStyle(snapshot.isDraggingOver, list)}>
                     {list.map((item, index) => (
                         <Draggable draggableId={item.id} index={index} key={item.id} isDragDisabled={isRuntime || item.id === 'Display'} >
-                            {(provided) => {
-                                return (
+                            {(provided) => (
+                                <>
                                     <div style={getItemStyle(isRuntime)}>
                                         <div className={styles.item}
                                             onDoubleClick={() => onDoubleClick(item.id)}
@@ -71,12 +75,13 @@ const Constructor: FC<BoardProps & ExtraProps> = ({ col: { list, id }, isDraggin
                                         >
                                             {item.component}
                                             <img className={styles.divider}
-                                                style={getDividerStyle(provided.draggableProps.style?.transform, isDragging)}
+                                                style={getDividerStyle(index, destinationItem, isDragging)}
                                                 src={underline} alt="underline" />
                                         </div>
                                     </div>
-                                )
-                            }}
+                                </>
+                            )
+                            }
                         </Draggable>
                     )
                     )}

@@ -15,7 +15,8 @@
     border-radius: 6px;
 }
 
-.item {
+.item,
+.copy {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -30,6 +31,10 @@
 
     background: #FFFFFF;
     border-radius: 4px;
+}
+
+.copy ~ div > .item {
+    transform: none !important;
 }
 
 [data-rbd-draggable-id="Display"].item {
@@ -91,4 +96,5 @@
 .divider {
     position: absolute;
     bottom: -5px;
+    transition: 5s all linear;
 }

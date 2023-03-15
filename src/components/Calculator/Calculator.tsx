@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DragUpdate, DropResult } from "react-beautiful-dnd";
 import { ListItem } from "../../@types/common";
 import Constructor from "../Constructor/Constructor";
 import Dashboard from "../Dashboard/Dashboard";
@@ -14,15 +14,15 @@ import move from '../../assets/icons/cursor-move.svg';
 import { selectIsRuntime } from "../../redux/features/mode/modeSlice";
 import styles from "./Calculator.module.css";
 
-type BoardType = {
-    id: string;
-    list: ListItem[];
-};
-
 export type InitialState = {
     'list-1': BoardType,
     'list-2': BoardType
 }
+
+type BoardType = {
+    id: string;
+    list: ListItem[];
+};
 
 const getCalcStyle = (isDragging: boolean) => ({
     cursor: isDragging ? `url(${move}) 10 10, auto` : 'default'
@@ -48,6 +48,7 @@ const Calculator: FC = () => {
     const isRuntime = useSelector(selectIsRuntime);
     const [columns, setColumns] = useState(initialColumns);
     const [isDragging, setIsDragging] = useState(false);
+    const [destinationItem, setDestinationItem] = useState<null | number>(null);
 
     useEffect(() => {
         if (!isRuntime) {
@@ -57,6 +58,13 @@ const Calculator: FC = () => {
 
     const onDragStart = () => {
         setIsDragging(true);
+        return null;
+    }
+
+    const onDragUpdate = ({ destination }: DragUpdate) => {
+        if (destination?.index) {
+            setDestinationItem(destination?.index);
+        }
         return null;
     }
 
@@ -155,14 +163,16 @@ const Calculator: FC = () => {
     }
 
     return (
-        <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart} >
+        <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart} onDragUpdate={onDragUpdate}>
             <div className={styles.wrapper} style={getCalcStyle(isDragging)}>
                 <div className={styles.calculator}>
                     <Modes columns={columns} />
                     {Object.values(columns).map(col => (
                         (col.id === "list-1" && !isRuntime)
                             ? <Dashboard col={col} key={col.id} />
-                            : <Constructor isDragging={isDragging} columns={columns} setColumns={setColumns} col={col} key={col.id} />
+                            : <Constructor isDragging={isDragging}
+                                columns={columns} destinationItem={destinationItem}
+                                setColumns={setColumns} col={col} key={col.id} />
                     ))}
                 </div>
             </div>

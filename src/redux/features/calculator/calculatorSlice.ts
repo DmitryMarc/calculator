@@ -32,7 +32,7 @@ export const calculatorSlice = createSlice({
                 } else if (action.payload !== ',') {
                     state.enteredNumber += action.payload;
                 }
-            } else if (state.enteredNumber !== ',') {
+            } else if (action.payload !== ',') {
                 state.enteredNumber = action.payload;
             } else {
                 state.enteredNumber = '0.';
